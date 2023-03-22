@@ -36,11 +36,16 @@ Profile profile;
     }
 
   public void createNewProfile(String userName, String age) {
-  //Check if user name is less than three letters
+    //Tidy up user name
+    String tidiedUserName = userName.substring(0,1).toUpperCase() + userName.substring(1).toLowerCase();
+    userName = tidiedUserName;
+
+    //Check if user name is less than three letters
     if (userName.length() < 3){
       MessageCli.INVALID_USERNAME_TOO_SHORT.printMessage(userName);
       return;
     }
+
     // Check if valid age
     boolean isNumeric = age.chars().allMatch( Character::isDigit );
     if (isNumeric == false){
@@ -51,6 +56,7 @@ Profile profile;
       MessageCli.INVALID_AGE.printMessage(age, userName);
       return;
     }
+
     //Check if user name is not unique
     for (Profile profile : database) {
       if (profile.getUserName().equals(userName)) {
@@ -58,12 +64,11 @@ Profile profile;
         return;
       }
     }
-    //Tidy up user name
-    String tidiedUserName = userName.substring(0,1).toUpperCase() + userName.substring(1).toLowerCase();
-     //Otherwise, if all good as profile to database
-    Profile profile = new Profile(rank, tidiedUserName, age);
+    
+     //Otherwise, if all good add profile to database
+    Profile profile = new Profile(rank, userName, age);
     database.add(profile);
-    MessageCli.PROFILE_CREATED.printMessage(tidiedUserName, age);
+    MessageCli.PROFILE_CREATED.printMessage(userName, age);
     rank++;
   
   }
