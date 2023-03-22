@@ -8,52 +8,39 @@ public class InsuranceSystem {
 
 String userName;
 String age;
+ArrayList<Profile> database = new ArrayList<Profile>();
+private Profile Profile;
+private nz.ac.auckland.se281.Profile person;
   
-  ArrayList InsuranceSystem = new ArrayList();
-
-  public InsuranceSystem() {
+    public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
-  
+    
   }
 
   public void printDatabase() {
-    if (InsuranceSystem.size() == 0) {
+    if (database.size() == 0) {
       MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0","s",".");
-    } else if (InsuranceSystem.size() == 1) {
+    } else if (database.size() == 1) {
       MessageCli.PRINT_DB_POLICY_COUNT.printMessage("1","",".");
-      System.out.println(InsuranceSystem.get(0));
+      System.out.println(database.get(0));
     } else {
-      MessageCli.PRINT_DB_POLICY_COUNT.printMessage(MaxProfile,"s",".");
-      System.out.println(ArrayList.Insurancesystem());    
+      int databaseSize = database.size();
+      String databaseSizeAsString = Integer.toString(databaseSize);
+      MessageCli.PRINT_DB_POLICY_COUNT.printMessage(databaseSizeAsString,"s",".");
+      for (int i = 0; i < database.size(); i++) {
+        System.out.println(database.get(i));
+      }
     }
   }
 
   public void createNewProfile(String userName, String age) {
-    Profile person = new Profile();
-    person.create();
+    this.person = new Profile(userName, age);
+    database.add(this.person);
    
   }
 
-
-  public String getUserName() {
-    return userName;
-  }
-
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
-
-  public String getAge() {
-    return age;
-  }
-
-  public void setAge(String age) {
-    this.age = age;
-  }
-
   public void loadProfile(String userName) {
-    // TODO: Complete this method.
-    this.userName = userName;
+
   }
 
   public void unloadProfile() {
@@ -61,10 +48,10 @@ String age;
   }
 
   public void deleteProfile(String userName) {
-   InsuranceSystem.remove(userName);
+ 
   }
 
   public void createPolicy(PolicyType type, String[] options) {
-    // TODO: Complete this method.
+
   }
 }
