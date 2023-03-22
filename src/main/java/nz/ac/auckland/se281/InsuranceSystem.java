@@ -8,9 +8,9 @@ public class InsuranceSystem {
 
 String userName;
 String age;
+int rank = 1;
 ArrayList<Profile> database = new ArrayList<Profile>();
-private Profile Profile;
-private nz.ac.auckland.se281.Profile person;
+Profile profile;
   
     public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
@@ -21,22 +21,23 @@ private nz.ac.auckland.se281.Profile person;
     if (database.size() == 0) {
       MessageCli.PRINT_DB_POLICY_COUNT.printMessage("0","s",".");
     } else if (database.size() == 1) {
-      MessageCli.PRINT_DB_POLICY_COUNT.printMessage("1","",".");
-      System.out.println(database.get(0));
+      MessageCli.PRINT_DB_POLICY_COUNT.printMessage("1","",":");
     } else {
       int databaseSize = database.size();
       String databaseSizeAsString = Integer.toString(databaseSize);
-      MessageCli.PRINT_DB_POLICY_COUNT.printMessage(databaseSizeAsString,"s",".");
-      for (int i = 0; i < database.size(); i++) {
-        System.out.println(database.get(i));
-      }
+      MessageCli.PRINT_DB_POLICY_COUNT.printMessage(databaseSizeAsString,"s",":");
+    } 
+    for (Profile profile : database) {
+      System.out.println(" " + profile.getRank() + ": " + profile.getUserName() + ", " + profile.getAge()); 
     }
-  }
+    }
 
   public void createNewProfile(String userName, String age) {
-    this.person = new Profile(userName, age);
-    database.add(this.person);
-   
+    Profile profile = new Profile(rank, userName, age);
+    database.add(profile);
+    MessageCli.PROFILE_CREATED.printMessage(userName, age);
+    rank++;
+  
   }
 
   public void loadProfile(String userName) {
