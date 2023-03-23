@@ -12,7 +12,6 @@ int ageAsInteger;
 int rank = 1;
 ArrayList<Profile> database = new ArrayList<Profile>();
 Profile currentProfile;
-Profile loadedProfile;
   
     public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
@@ -30,14 +29,9 @@ Profile loadedProfile;
       String databaseSizeAsString = Integer.toString(databaseSize);
       MessageCli.PRINT_DB_POLICY_COUNT.printMessage(databaseSizeAsString,"s",":");
     } 
-    // display all rank, name and age of all entries in the database and mark loaded profile with triple asterisks
+    // display all rank, name and age of all entries in the database
     for (Profile currentProfile : database) {
-      if (currentProfile.getUserName().equals(loadedProfile.getUserName())){
-        System.out.println("*** " + currentProfile.getRank() + ": " + currentProfile.getUserName() + ", " + currentProfile.getAge());
-      }
-      else{
-        System.out.println(" " + currentProfile.getRank() + ": " + currentProfile.getUserName() + ", " + currentProfile.getAge()); 
-      }
+      System.out.println(" " + currentProfile.getRank() + ": " + currentProfile.getUserName() + ", " + currentProfile.getAge()); 
     }
     }
 
@@ -85,18 +79,17 @@ Profile loadedProfile;
     String tidiedUserName = userName.substring(0,1).toUpperCase() + userName.substring(1).toLowerCase();
     userName = tidiedUserName;
     
-    //check through database for username entered, then loads it and prints message if found
+    //check through database for username entered, loads it and prints message if found
     for (int i = 0; i < database.size(); i++) {
       if (database.get(i).getUserName().equals(userName)) {
-        loadedProfile = database.get(i);
+        currentProfile = database.get(i);
         MessageCli.PROFILE_LOADED.printMessage(userName);
         break;
-        //or if username is not found in database....
       } else if (i == database.size() - 1) {
         MessageCli.NO_PROFILE_FOUND_TO_LOAD.printMessage(userName);
       }
     }
-    //System.out.println("Currently loaded profile: " + loadedProfile.getUserName() + ". Rank: " + loadedProfile.getRank() + ". Age: " + loadedProfile.getAge() + ".");
+    //System.out.println("Currently loaded profile: " + currentProfile.getUserName() + ". Rank: " + currentProfile.getRank() + ". Age: " + currentProfile.getAge() + ".");
 
   }
 
