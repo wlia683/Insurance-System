@@ -2,25 +2,27 @@ package nz.ac.auckland.se281;
 
 public class Profile {
 
-    private int rank;
-    private String userName;
-    private int age;
+  private int rank;
+  private String userName;
+  private int age;
+  protected boolean isActive;
 
-public Profile(int rank, String userName, String age) {
+  public Profile(int rank, boolean isActive, String userName, String age) {
     this.rank = rank;
     this.userName = userName;
+    this.isActive = isActive;
     this.age = Integer.parseInt(age);
-    }
+  }
 
-public int getRank() {
+  public int getRank() {
     return rank;
-    }
+  }
 
-public String getUserName() {
+  public String getUserName() {
     return userName;
-    }
+  }
 
-public int getAge() {
+  public int getAge() {
     return age;
-    }
+  }
 }

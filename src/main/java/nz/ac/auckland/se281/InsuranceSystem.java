@@ -7,6 +7,7 @@ public class InsuranceSystem {
 
   String userName;
   String age;
+  boolean isActive = false;
   int ageAsInteger;
   int rank = 1;
   ArrayList<Profile> database = new ArrayList<Profile>();
@@ -28,15 +29,14 @@ public class InsuranceSystem {
       String databaseSizeAsString = Integer.toString(databaseSize);
       MessageCli.PRINT_DB_POLICY_COUNT.printMessage(databaseSizeAsString, "s", ":");
     }
-    // display all rank, name and age of all entries in the database
+    // display all rank, name and age of all entries in the database, active profile will also be marked
     for (Profile currentProfile : database) {
-      System.out.println(
-          " "
-              + currentProfile.getRank()
-              + ": "
-              + currentProfile.getUserName()
-              + ", "
-              + currentProfile.getAge());
+      if(currentProfile.isActive == true){
+      MessageCli.PRINT_DB_PROFILE_HEADER_SHORT.printMessage("*** ",Integer.toString(currentProfile.getRank()), currentProfile.getUserName(), Integer.toString(currentProfile.getAge()));
+    }
+    else {
+      MessageCli.PRINT_DB_PROFILE_HEADER_SHORT.printMessage(" ",Integer.toString(currentProfile.getRank()), currentProfile.getUserName(), Integer.toString(currentProfile.getAge()));
+    }
     }
   }
 
@@ -73,7 +73,7 @@ public class InsuranceSystem {
     }
 
     // Otherwise, if all good add profile to database
-    Profile currentProfile = new Profile(rank, userName, age);
+    Profile currentProfile = new Profile(rank, isActive, userName, age);
     database.add(currentProfile);
     MessageCli.PROFILE_CREATED.printMessage(userName, age);
     rank++;
@@ -86,15 +86,21 @@ public class InsuranceSystem {
         userName.substring(0, 1).toUpperCase() + userName.substring(1).toLowerCase();
     userName = tidiedUserName;
 
+    if (database.size() == 0) {
+      MessageCli.NO_PROFILE_FOUND_TO_LOAD.printMessage(userName);
+    }
+    else{
     // check through database for username entered, loads it and prints message if found
     for (int i = 0; i < database.size(); i++) {
       if (database.get(i).getUserName().equals(userName)) {
         currentProfile = database.get(i);
+        currentProfile.isActive = true;
         MessageCli.PROFILE_LOADED.printMessage(userName);
         break;
       } else if (i == database.size() - 1) {
         MessageCli.NO_PROFILE_FOUND_TO_LOAD.printMessage(userName);
       }
+    }
     }
   }
 
