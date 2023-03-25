@@ -18,6 +18,14 @@ public class Profile {
     return rank;
   }
 
+  public boolean getIsActive() {
+    return isActive;
+  }
+
+  public void setIsActive(boolean isActive) {
+    this.isActive = isActive;
+  }
+
   public String getUserName() {
     return userName;
   }
