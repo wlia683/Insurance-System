@@ -49,6 +49,14 @@ public class InsuranceSystem {
   }
 
   public void createNewProfile(String userName, String age) {
+    // Check if a profile is already loaded and if so, it must be unloaded before creating a new profile
+    for (Profile currentProfile : database) {
+      if(currentProfile.isActive == true) {
+        MessageCli.CANNOT_CREATE_WHILE_LOADED.printMessage(currentProfile.getUserName());
+        return;
+      }
+    }
+    
     // Standardise user name entered
     String tidiedUserName =
         userName.substring(0, 1).toUpperCase() + userName.substring(1).toLowerCase();
@@ -94,10 +102,10 @@ public class InsuranceSystem {
         userName.substring(0, 1).toUpperCase() + userName.substring(1).toLowerCase();
     userName = tidiedUserName;
 
+        // check for profile already loaded and if so, unload it
     if (database.size() == 0) {
       MessageCli.NO_PROFILE_FOUND_TO_LOAD.printMessage(userName);
     } else {
-      // check for profile already loaded
       for (Profile currentProfile : database) {
         if (currentProfile.isActive == true) {
           currentProfile.setIsActive(false);
