@@ -12,6 +12,7 @@ public class InsuranceSystem {
   int rank = 1;
   ArrayList<Profile> database = new ArrayList<Profile>();
   Profile currentProfile;
+  int sumInsured;
 
   public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
@@ -150,42 +151,38 @@ public class InsuranceSystem {
 
   public void deleteProfile(String userName) {
 
-        // Standardise user name entered
-        String tidiedUserName =
+    // Standardise user name entered
+    String tidiedUserName =
         userName.substring(0, 1).toUpperCase() + userName.substring(1).toLowerCase();
     userName = tidiedUserName;
-    
+
     // Check if database is empty
     if (database.size() == 0) {
       MessageCli.NO_PROFILE_FOUND_TO_DELETE.printMessage(userName);
-      //System.out.println("stop 1");
       return;
     }
 
-        // Check the profile is loaded
-        for (Profile currentProfile : database) {
-          if ((currentProfile.getUserName().equals(userName)) && (currentProfile.isActive == true)) {
-            MessageCli.CANNOT_DELETE_PROFILE_WHILE_LOADED.printMessage(currentProfile.getUserName());
-            //System.out.println("stop 2");
-            return;
-          }
-        }
+    // Check the profile is loaded
+    for (Profile currentProfile : database) {
+      if ((currentProfile.getUserName().equals(userName)) && (currentProfile.isActive == true)) {
+        MessageCli.CANNOT_DELETE_PROFILE_WHILE_LOADED.printMessage(currentProfile.getUserName());
+        return;
+      }
+    }
 
-    // Delete profile from database and then re-rank the remaining profiles. Or if name is not found in the database, say so.
+    // Delete profile from database and then re-rank the remaining profiles. Or if name is not found
+    // in the database, say so.
     for (int i = 0; i < database.size(); i++) {
       if (database.get(i).getUserName().equals(userName)) {
         database.remove(i);
         MessageCli.PROFILE_DELETED.printMessage(userName);
-        //System.out.println("stop 4");
         for (int j = i; j < database.size(); j++) {
           database.get(j).setRank(j + 1);
-          ///System.out.println("stop 5");
         }
         return;
       }
-      if (i == database.size()-1) {
+      if (i == database.size() - 1) {
         MessageCli.NO_PROFILE_FOUND_TO_DELETE.printMessage(userName);
-        //System.out.println("stop 3");
         return;
       }
     }
