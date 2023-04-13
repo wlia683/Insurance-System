@@ -1,6 +1,7 @@
 package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import nz.ac.auckland.se281.Main.PolicyType;
 
 public class InsuranceSystem {
@@ -11,12 +12,35 @@ public class InsuranceSystem {
   int ageAsInteger;
   int rank = 1;
   ArrayList<Profile> database = new ArrayList<Profile>();
+  ArrayList<Policy> policyDatabase = new ArrayList<Policy>();
   Profile currentProfile;
-  int sumInsured;
+  Policy currentPolicy;
+  HashMap<Integer, ArrayList<Policy>> policyMap;
+  int ID = (int) (Math.random() * 1000000);
 
   public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
+  }
 
+  public void profilePolicyManagement(
+      ArrayList<Profile> database, ArrayList<Policy> policyDatabase) {
+    this.database = database;
+    this.policyDatabase = policyDatabase;
+    this.policyMap = new HashMap<Integer, ArrayList<Policy>>();
+
+    for (Profile currentProfile : database) {
+      ArrayList<Policy> policies = new ArrayList<Policy>();
+      for (Policy currentPolicy : policyDatabase) {
+        if (currentPolicy.getProfile().getID() == currentProfile.getID()) {
+          policies.add(currentPolicy);
+        }
+      }
+      policyMap.put(currentProfile.getID(), policies);
+    }
+  }
+
+  public ArrayList<Policy> getPolicies(Profile currentprofile) {
+    return policyMap.get(currentprofile.getRank());
   }
 
   public void printDatabase() {
@@ -30,6 +54,7 @@ public class InsuranceSystem {
       String databaseSizeAsString = Integer.toString(databaseSize);
       MessageCli.PRINT_DB_POLICY_COUNT.printMessage(databaseSizeAsString, "s", ":");
     }
+
     // display all rank, name and age of all entries in the database, active profile will also be
     // marked
     for (Profile currentProfile : database) {
@@ -91,10 +116,11 @@ public class InsuranceSystem {
     }
 
     // Otherwise, if all good add profile to database
-    Profile currentProfile = new Profile(rank, isActive, userName, age);
+    Profile currentProfile = new Profile(rank, ID, isActive, userName, age);
     database.add(currentProfile);
     MessageCli.PROFILE_CREATED.printMessage(userName, age);
     rank++;
+    ID = (int) (Math.random() * 1000000);
   }
 
   public void loadProfile(String userName) {
@@ -188,5 +214,16 @@ public class InsuranceSystem {
     }
   }
 
-  public void createPolicy(PolicyType type, String[] options) {}
+  // create a new policy for the current profile
+  public void createPolicy(PolicyType type, String[] options) {
+
+    // check for loaded profile
+    if (currentProfile.isActive == false) {
+      MessageCli.NO_PROFILE_LOADED.printMessage();
+      return;
+    }
+
+    policyDatabase.add(currentPolicy);
+    MessageCli.NEW_POLICY_CREATED.printMessage(currentProfile.getUserName(), type.toString());
+  }
 }
