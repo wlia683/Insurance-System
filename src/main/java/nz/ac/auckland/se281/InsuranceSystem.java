@@ -17,6 +17,7 @@ public class InsuranceSystem {
   Policy currentPolicy;
   HashMap<Integer, ArrayList<Policy>> policyMap;
   int ID = (int) (Math.random() * 1000000);
+  int sumInsured;
 
   public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
@@ -31,7 +32,7 @@ public class InsuranceSystem {
     for (Profile currentProfile : database) {
       ArrayList<Policy> policies = new ArrayList<Policy>();
       for (Policy currentPolicy : policyDatabase) {
-        if (currentPolicy.getProfile().getID() == currentProfile.getID()) {
+        if (currentPolicy.getID() == currentProfile.getID()) {
           policies.add(currentPolicy);
         }
       }
@@ -39,8 +40,8 @@ public class InsuranceSystem {
     }
   }
 
-  public ArrayList<Policy> getPolicies(Profile currentprofile) {
-    return policyMap.get(currentprofile.getRank());
+  public ArrayList<Policy> getPolicies(Profile currentProfile) {
+    return policyMap.get(currentProfile.getRank());
   }
 
   public void printDatabase() {
@@ -58,18 +59,49 @@ public class InsuranceSystem {
     // display all rank, name and age of all entries in the database, active profile will also be
     // marked
     for (Profile currentProfile : database) {
+      int policyCount = 0;
+      for (Policy currentPolicy : policyDatabase) {
+        if (currentPolicy.getID() == currentProfile.getID()) {
+          policyCount++;
+        }
+      }
+      currentProfile.setPolicyCount(policyCount);
       if (currentProfile.isActive == true) {
-        MessageCli.PRINT_DB_PROFILE_HEADER_SHORT.printMessage(
-            "*** ",
-            Integer.toString(currentProfile.getRank()),
-            currentProfile.getUserName(),
-            Integer.toString(currentProfile.getAge()));
+        if (currentProfile.policyCount == 1) {
+          MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
+              "*** ",
+              Integer.toString(currentProfile.getRank()),
+              currentProfile.getUserName(),
+              Integer.toString(currentProfile.getAge()),
+              Integer.toString(currentProfile.getPolicyCount()),
+              "y");
+        } else {
+          MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
+              "*** ",
+              Integer.toString(currentProfile.getRank()),
+              currentProfile.getUserName(),
+              Integer.toString(currentProfile.getAge()),
+              Integer.toString(currentProfile.getPolicyCount()),
+              "ies");
+        }
       } else {
-        MessageCli.PRINT_DB_PROFILE_HEADER_SHORT.printMessage(
-            " ",
-            Integer.toString(currentProfile.getRank()),
-            currentProfile.getUserName(),
-            Integer.toString(currentProfile.getAge()));
+        if (currentProfile.policyCount == 1) {
+          MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
+              " ",
+              Integer.toString(currentProfile.getRank()),
+              currentProfile.getUserName(),
+              Integer.toString(currentProfile.getAge()),
+              Integer.toString(currentProfile.getPolicyCount()),
+              "y");
+        } else {
+          MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
+              " ",
+              Integer.toString(currentProfile.getRank()),
+              currentProfile.getUserName(),
+              Integer.toString(currentProfile.getAge()),
+              Integer.toString(currentProfile.getPolicyCount()),
+              "ies");
+        }
       }
     }
   }
@@ -214,16 +246,18 @@ public class InsuranceSystem {
     }
   }
 
-  // create a new policy for the current profile
   public void createPolicy(PolicyType type, String[] options) {
 
-    // check for loaded profile
-    if (currentProfile.isActive == false) {
-      MessageCli.NO_PROFILE_LOADED.printMessage();
+    // check if no loaded profile
+    if (currentProfile == null || currentProfile.isActive == false) {
+      MessageCli.NO_PROFILE_FOUND_TO_CREATE_POLICY.printMessage();
       return;
     }
-
-    policyDatabase.add(currentPolicy);
-    MessageCli.NEW_POLICY_CREATED.printMessage(currentProfile.getUserName(), type.toString());
+    // if CAR Policytype
+    if (type == PolicyType.CAR) {
+      Policy currentPolicy = new CarPolicy(type, options);
+      policyDatabase.add(currentPolicy);
+      MessageCli.NEW_POLICY_CREATED.printMessage(currentProfile.getUserName(), type.toString());
+    }
   }
 }

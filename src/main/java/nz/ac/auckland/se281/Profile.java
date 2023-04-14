@@ -10,6 +10,7 @@ public class Profile {
   protected boolean isActive;
   private ArrayList<Policy> policies;
   private int ID;
+  protected int policyCount;
 
   public Profile(int rank, int ID, boolean isActive, String userName, String age) {
     this.rank = rank;
@@ -54,5 +55,13 @@ public class Profile {
 
   public ArrayList<Policy> getPolicies() {
     return policies;
+  }
+
+  public void setPolicyCount(int policyCount) {
+    this.policyCount = policyCount;
+  }
+
+  public int getPolicyCount() {
+    return policyCount;
   }
 }
