@@ -6,19 +6,19 @@ public class Profile {
 
   private int rank;
   private String userName;
-  protected int age;
+  private int age;
   protected boolean isActive;
   private ArrayList<Policy> policies;
   private int ID;
   protected int policyCount;
 
-  public Profile(int rank, int ID, boolean isActive, String userName, String age) {
+  public Profile(int rank, int ID, boolean isActive, String userName, String age, int policyCount) {
     this.rank = rank;
     this.ID = ID;
     this.userName = userName;
     this.isActive = isActive;
     this.age = Integer.parseInt(age);
-    this.policies = new ArrayList<Policy>();
+    this.policyCount = policyCount;
   }
 
   public void setID(int ID) {

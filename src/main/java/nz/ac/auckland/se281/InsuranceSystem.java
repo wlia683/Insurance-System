@@ -16,32 +16,11 @@ public class InsuranceSystem {
   Profile currentProfile;
   Policy currentPolicy;
   HashMap<Integer, ArrayList<Policy>> policyMap;
-  int ID = (int) (Math.random() * 1000000);
-  int sumInsured;
+  int ID = 0;
+  int policyCount;
 
   public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
-  }
-
-  public void profilePolicyManagement(
-      ArrayList<Profile> database, ArrayList<Policy> policyDatabase) {
-    this.database = database;
-    this.policyDatabase = policyDatabase;
-    this.policyMap = new HashMap<Integer, ArrayList<Policy>>();
-
-    for (Profile currentProfile : database) {
-      ArrayList<Policy> policies = new ArrayList<Policy>();
-      for (Policy currentPolicy : policyDatabase) {
-        if (currentPolicy.getID() == currentProfile.getID()) {
-          policies.add(currentPolicy);
-        }
-      }
-      policyMap.put(currentProfile.getID(), policies);
-    }
-  }
-
-  public ArrayList<Policy> getPolicies(Profile currentProfile) {
-    return policyMap.get(currentProfile.getRank());
   }
 
   public void printDatabase() {
@@ -59,7 +38,7 @@ public class InsuranceSystem {
     // display all rank, name and age of all entries in the database, active profile will also be
     // marked
     for (Profile currentProfile : database) {
-      int policyCount = 0;
+      policyCount = 0;
       for (Policy currentPolicy : policyDatabase) {
         if (currentPolicy.getID() == currentProfile.getID()) {
           policyCount++;
@@ -148,19 +127,19 @@ public class InsuranceSystem {
     }
 
     // Otherwise, if all good add profile to database
-    Profile currentProfile = new Profile(rank, ID, isActive, userName, age);
+    Profile currentProfile = new Profile(rank, ID, isActive, userName, age, policyCount);
     database.add(currentProfile);
     MessageCli.PROFILE_CREATED.printMessage(userName, age);
     rank++;
-    ID = (int) (Math.random() * 1000000);
+    ID++;
   }
 
   public void loadProfile(String userName) {
 
     // Standardise user name entered
-    String tidiedUserName =
+    String titleCaseName =
         userName.substring(0, 1).toUpperCase() + userName.substring(1).toLowerCase();
-    userName = tidiedUserName;
+    userName = titleCaseName;
 
     // check for profile already loaded and if so, unload it
     if (database.size() == 0) {
@@ -253,11 +232,34 @@ public class InsuranceSystem {
       MessageCli.NO_PROFILE_FOUND_TO_CREATE_POLICY.printMessage();
       return;
     }
-    // if CAR Policytype
-    if (type == PolicyType.CAR) {
-      Policy currentPolicy = new CarPolicy(type, options);
-      policyDatabase.add(currentPolicy);
-      MessageCli.NEW_POLICY_CREATED.printMessage(currentProfile.getUserName(), type.toString());
+
+    switch (type) {
+      case CAR:
+        Policy carPolicy = new CarPolicy(currentProfile.getID(), type, options);
+        policyDatabase.add(carPolicy);
+        MessageCli.NEW_POLICY_CREATED.printMessage(currentProfile.getUserName(), type.toString());
+        break;
+
+      case HOME:
+        Policy homePolicy = new HomePolicy(currentProfile.getID(), type, options);
+        policyDatabase.add(homePolicy);
+        MessageCli.NEW_POLICY_CREATED.printMessage(currentProfile.getUserName(), type.toString());
+        break;
+
+      case LIFE:
+        Policy lifePolicy = new LifePolicy(currentProfile.getID(), type, options);
+        policyDatabase.add(lifePolicy);
+        MessageCli.NEW_POLICY_CREATED.printMessage(currentProfile.getUserName(), type.toString());
+        break;
+    }
+
+    // print out policy database details
+    for (Policy currentPolicy : policyDatabase) {
+      System.out.println(currentPolicy.getID());
+      System.out.println(currentPolicy.getType());
+      for (String option : options) {
+        System.out.println(option);
+      }
     }
   }
 }
