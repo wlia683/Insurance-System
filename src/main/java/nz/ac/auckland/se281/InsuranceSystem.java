@@ -243,19 +243,22 @@ public class InsuranceSystem {
       case CAR:
         Policy carPolicy = new CarPolicy(currentProfile.getID(), type, options);
         policyDatabase.add(carPolicy);
-        MessageCli.NEW_POLICY_CREATED.printMessage(currentProfile.getUserName(), type.toString());
+        MessageCli.NEW_POLICY_CREATED.printMessage(
+            (type.toString().toLowerCase()), currentProfile.getUserName());
         break;
 
       case HOME:
         Policy homePolicy = new HomePolicy(currentProfile.getID(), type, options);
         policyDatabase.add(homePolicy);
-        MessageCli.NEW_POLICY_CREATED.printMessage(currentProfile.getUserName(), type.toString());
+        MessageCli.NEW_POLICY_CREATED.printMessage(
+            type.toString().toLowerCase(), currentProfile.getUserName());
         break;
 
       case LIFE:
         Policy lifePolicy = new LifePolicy(currentProfile.getID(), type, options);
         policyDatabase.add(lifePolicy);
-        MessageCli.NEW_POLICY_CREATED.printMessage(currentProfile.getUserName(), type.toString());
+        MessageCli.NEW_POLICY_CREATED.printMessage(
+            type.toString().toLowerCase(), currentProfile.getUserName());
         break;
     }
 
