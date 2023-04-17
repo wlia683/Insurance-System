@@ -207,7 +207,8 @@ public class InsuranceSystem {
       }
     }
 
-    // Delete profile from database and then re-rank the remaining profiles. Or if name is not found
+    // Delete profile from databases and then re-rank the remaining profiles. Or if name is not
+    // found
     // in the database, say so.
     for (int i = 0; i < database.size(); i++) {
       if (database.get(i).getUserName().equals(userName)) {
@@ -215,6 +216,11 @@ public class InsuranceSystem {
         MessageCli.PROFILE_DELETED.printMessage(userName);
         for (int j = i; j < database.size(); j++) {
           database.get(j).setRank(j + 1);
+        }
+        for (int k = 0; k < policyDatabase.size(); k++) {
+          if (policyDatabase.get(k).getID() == i) {
+            policyDatabase.remove(k);
+          }
         }
         return;
       }
@@ -253,13 +259,14 @@ public class InsuranceSystem {
         break;
     }
 
-    // print out policy database details
+    // TESTING: print out policy database details
     for (Policy currentPolicy : policyDatabase) {
       System.out.println(currentPolicy.getID());
       System.out.println(currentPolicy.getType());
-      for (String option : options) {
-        System.out.println(option);
-      }
+      System.out.println(currentPolicy.getSumInsured());
+      System.out.println(((CarPolicy) currentPolicy).getRegistration());
+      System.out.println(((CarPolicy) currentPolicy).getMakeAndModel());
+      System.out.println(((CarPolicy) currentPolicy).getMechanicalBreakdown());
     }
   }
 }
