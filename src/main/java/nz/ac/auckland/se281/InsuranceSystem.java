@@ -16,7 +16,7 @@ public class InsuranceSystem {
   Policy currentPolicy;
   int ID = 0;
   int policyCount;
-  int discountedPremium;
+  int totalPremium;
 
   public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
@@ -45,47 +45,66 @@ public class InsuranceSystem {
         }
       }
       currentProfile.setPolicyCount(policyCount);
+
+      // determine total premium
+      totalPremium = 0;
+      for (Policy currentPolicy : policyDatabase) {
+        if (currentPolicy.getID() == currentProfile.getID()) {
+          if (currentPolicy.getType() == PolicyType.CAR) {
+            totalPremium += ((CarPolicy) currentPolicy).getDiscountedCarPremium();
+          } else if (currentPolicy.getType() == PolicyType.HOME) {
+            totalPremium += ((HomePolicy) currentPolicy).getDiscountedHomePremium();
+          } else if (currentPolicy.getType() == PolicyType.LIFE) {
+            totalPremium += ((LifePolicy) currentPolicy).getDiscountedLifePremium();
+          }
+        }
+      }
+
       if (currentProfile.isActive == true) {
         if (currentProfile.policyCount == 1) {
-          MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
+          MessageCli.PRINT_DB_PROFILE_HEADER_LONG.printMessage(
               "*** ",
               Integer.toString(currentProfile.getRank()),
               currentProfile.getUserName(),
               Integer.toString(currentProfile.getAge()),
               Integer.toString(currentProfile.getPolicyCount()),
-              "y");
+              "y",
+              Integer.toString(totalPremium));
           // print details of the policy under this profile
           MessageCli.PRINT_DB_CAR_POLICY.printMessage(
               ((CarPolicy) currentPolicy).getMakeAndModel(),
               Integer.toString(currentPolicy.getSumInsured()),
-              (Integer.toString(((CarPolicy) currentPolicy).getBasePremium())),
-              Integer.toString(((CarPolicy) currentPolicy).getDiscountedPremium()));
+              (Integer.toString(((CarPolicy) currentPolicy).getBaseCarPremium())),
+              Integer.toString(((CarPolicy) currentPolicy).getDiscountedCarPremium()));
         } else {
-          MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
+          MessageCli.PRINT_DB_PROFILE_HEADER_LONG.printMessage(
               "*** ",
               Integer.toString(currentProfile.getRank()),
               currentProfile.getUserName(),
               Integer.toString(currentProfile.getAge()),
               Integer.toString(currentProfile.getPolicyCount()),
-              "ies");
+              "ies",
+              Integer.toString(totalPremium));
         }
       } else {
         if (currentProfile.policyCount == 1) {
-          MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
+          MessageCli.PRINT_DB_PROFILE_HEADER_LONG.printMessage(
               " ",
               Integer.toString(currentProfile.getRank()),
               currentProfile.getUserName(),
               Integer.toString(currentProfile.getAge()),
               Integer.toString(currentProfile.getPolicyCount()),
-              "y");
+              "y",
+              Integer.toString(totalPremium));
         } else {
-          MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
+          MessageCli.PRINT_DB_PROFILE_HEADER_LONG.printMessage(
               " ",
               Integer.toString(currentProfile.getRank()),
               currentProfile.getUserName(),
               Integer.toString(currentProfile.getAge()),
               Integer.toString(currentProfile.getPolicyCount()),
-              "ies");
+              "ies",
+              Integer.toString(totalPremium));
         }
       }
     }
@@ -286,16 +305,6 @@ public class InsuranceSystem {
         MessageCli.NEW_POLICY_CREATED.printMessage(
             type.toString().toLowerCase(), currentProfile.getUserName());
         break;
-    }
-
-    // TESTING: print out policy database details
-    for (Policy currentPolicy : policyDatabase) {
-      System.out.println(currentPolicy.getID());
-      System.out.println(currentPolicy.getType());
-      System.out.println(currentPolicy.getSumInsured());
-      System.out.println(((CarPolicy) currentPolicy).getRegistration());
-      System.out.println(((CarPolicy) currentPolicy).getMakeAndModel());
-      System.out.println(((CarPolicy) currentPolicy).getMechanicalBreakdown());
     }
   }
 }
