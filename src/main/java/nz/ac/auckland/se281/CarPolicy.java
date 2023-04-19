@@ -7,10 +7,10 @@ public class CarPolicy extends Policy {
   private String makeAndModel;
   private String registration;
   private boolean mechanicalBreakdown;
-  private int premium;
-  private Profile currentProfile;
+  private int basePremium;
+  private int discountedPremium;
 
-  public CarPolicy(int ID, PolicyType type, String[] options) {
+  public CarPolicy(int ID, int age, int policyCount, PolicyType type, String[] options) {
     super(ID, type, options);
 
     this.makeAndModel = options[1];
@@ -21,24 +21,34 @@ public class CarPolicy extends Policy {
       this.mechanicalBreakdown = false;
     }
 
-    for (Profile profile : InsuranceSystem.database) {
-      for (Policy policy : policyDatabase) {
-        if (policy.getID() == profile.getID()) {
-          currentProfile = profile;
-          break;
-        }
+    // Determine premium based on age and mechanical breakdown coverage
+    if (age < 25) {
+      if (this.mechanicalBreakdown) {
+        this.basePremium = (int) (this.getSumInsured() * 0.15 + 80);
+      } else {
+        this.basePremium = (int) (this.getSumInsured() * 0.15);
+      }
+    } else {
+      if (this.mechanicalBreakdown) {
+        this.basePremium = (int) (this.getSumInsured() * 0.1 + 80);
+      } else {
+        this.basePremium = (int) (this.getSumInsured() * 0.1);
       }
     }
 
-    if (currentProfile.getAge() < 25) {
-      this.premium = (int) (this.getSumInsured() * 0.15);
-    } else {
-      this.premium = (int) (this.getSumInsured() * 0.1);
+    if (policyCount == 2) {
+      this.discountedPremium = (int) (this.basePremium - (this.basePremium * 0.1));
+    } else if (policyCount >= 3) {
+      this.discountedPremium = (int) (this.basePremium - (this.basePremium * 0.15));
     }
   }
 
-  public int getPremium() {
-    return premium;
+  public int getBasePremium() {
+    return basePremium;
+  }
+
+  public int getDiscountedPremium() {
+    return discountedPremium;
   }
 
   public String getMakeAndModel() {

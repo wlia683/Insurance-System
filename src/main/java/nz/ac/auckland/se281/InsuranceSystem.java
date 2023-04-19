@@ -1,7 +1,6 @@
 package nz.ac.auckland.se281;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import nz.ac.auckland.se281.Main.PolicyType;
 
 public class InsuranceSystem {
@@ -15,9 +14,9 @@ public class InsuranceSystem {
   ArrayList<Policy> policyDatabase = new ArrayList<Policy>();
   Profile currentProfile;
   Policy currentPolicy;
-  HashMap<Integer, ArrayList<Policy>> policyMap;
   int ID = 0;
   int policyCount;
+  int discountedPremium;
 
   public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
@@ -38,6 +37,7 @@ public class InsuranceSystem {
     // display all rank, name and age of all entries in the database, active profile will also be
     // marked
     for (Profile currentProfile : database) {
+      // determine policy count
       policyCount = 0;
       for (Policy currentPolicy : policyDatabase) {
         if (currentPolicy.getID() == currentProfile.getID()) {
@@ -54,6 +54,12 @@ public class InsuranceSystem {
               Integer.toString(currentProfile.getAge()),
               Integer.toString(currentProfile.getPolicyCount()),
               "y");
+          // print details of the policy under this profile
+          MessageCli.PRINT_DB_CAR_POLICY.printMessage(
+              ((CarPolicy) currentPolicy).getMakeAndModel(),
+              Integer.toString(currentPolicy.getSumInsured()),
+              (Integer.toString(((CarPolicy) currentPolicy).getBasePremium())),
+              Integer.toString(((CarPolicy) currentPolicy).getDiscountedPremium()));
         } else {
           MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
               "*** ",
@@ -241,21 +247,41 @@ public class InsuranceSystem {
 
     switch (type) {
       case CAR:
-        Policy carPolicy = new CarPolicy(currentProfile.getID(), type, options);
+        Policy carPolicy =
+            new CarPolicy(currentProfile.getID(), ageAsInteger, policyCount, type, options);
         policyDatabase.add(carPolicy);
         MessageCli.NEW_POLICY_CREATED.printMessage(
             (type.toString().toLowerCase()), currentProfile.getUserName());
         break;
 
       case HOME:
-        Policy homePolicy = new HomePolicy(currentProfile.getID(), type, options);
+        Policy homePolicy = new HomePolicy(currentProfile.getID(), policyCount, type, options);
         policyDatabase.add(homePolicy);
         MessageCli.NEW_POLICY_CREATED.printMessage(
             type.toString().toLowerCase(), currentProfile.getUserName());
         break;
 
       case LIFE:
-        Policy lifePolicy = new LifePolicy(currentProfile.getID(), type, options);
+
+        // Check for age or pre-existing policy
+        if (currentProfile.getAge() >= 100) {
+          MessageCli.OVER_AGE_LIMIT_LIFE_POLICY.printMessage(currentProfile.getUserName());
+          return;
+        }
+
+        if (currentProfile.getPolicyCount() > 0) {
+          for (Policy currentPolicy : policyDatabase) {
+            if (currentPolicy.getType() == PolicyType.LIFE) {
+              MessageCli.ALREADY_HAS_LIFE_POLICY.printMessage(currentProfile.getUserName());
+              return;
+            }
+          }
+        }
+
+        // otherwise create life policy, if no issues
+
+        Policy lifePolicy =
+            new LifePolicy(currentProfile.getID(), ageAsInteger, policyCount, type, options);
         policyDatabase.add(lifePolicy);
         MessageCli.NEW_POLICY_CREATED.printMessage(
             type.toString().toLowerCase(), currentProfile.getUserName());
