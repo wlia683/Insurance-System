@@ -29,6 +29,8 @@ public class HomePolicy extends Policy {
       this.discountedHomePremium = (int) (this.homePremium - (this.homePremium * 0.1));
     } else if (policyCount >= 3) {
       this.discountedHomePremium = (int) (this.homePremium - (this.homePremium * 0.15));
+    } else {
+      this.discountedHomePremium = this.homePremium;
     }
   }
 

@@ -41,6 +41,8 @@ public class CarPolicy extends Policy {
       this.discountedCarPremium = (int) (this.carPremium - (this.carPremium * 0.1));
     } else if (policyCount >= 3) {
       this.discountedCarPremium = (int) (this.carPremium - (this.carPremium * 0.15));
+    } else {
+      this.discountedCarPremium = this.carPremium;
     }
   }
 

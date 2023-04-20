@@ -10,7 +10,8 @@ public class Profile {
   protected boolean isActive;
   private ArrayList<Policy> policies;
   private int ID;
-  protected int policyCount;
+  private int policyCount;
+  private int totalPremium;
 
   public Profile(int rank, int ID, boolean isActive, String userName, String age, int policyCount) {
     this.rank = rank;
@@ -19,6 +20,14 @@ public class Profile {
     this.isActive = isActive;
     this.age = Integer.parseInt(age);
     this.policyCount = policyCount;
+  }
+
+  public int getTotalPremium() {
+    return totalPremium;
+  }
+
+  public void setTotalPremium(int totalPremium) {
+    this.totalPremium = totalPremium;
   }
 
   public void setID(int ID) {

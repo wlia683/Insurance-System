@@ -16,6 +16,8 @@ public class LifePolicy extends Policy {
       this.discountedLifePremium = (int) (this.lifePremium - (this.lifePremium * 0.1));
     } else if (policyCount >= 3) {
       this.discountedLifePremium = (int) (this.lifePremium - (this.lifePremium * 0.15));
+    } else {
+      this.discountedLifePremium = this.lifePremium;
     }
   }
 
