@@ -6,11 +6,11 @@ public class HomePolicy extends Policy {
 
   private String address;
   private boolean rental;
-  private int homePremium;
-  private int discountedHomePremium;
+  private double homePremium;
+  private double discountedHomePremium;
 
-  public HomePolicy(int ID, int policyCount, PolicyType type, String[] options) {
-    super(ID, type, options);
+  public HomePolicy(Profile profile, int ID, int policyCount, PolicyType type, String[] options) {
+    super(ID, policyCount, type, options);
 
     this.address = options[1];
     if (options[2].equals("y")) {
@@ -20,26 +20,26 @@ public class HomePolicy extends Policy {
     }
 
     if (rental) {
-      this.homePremium = (int) (this.getSumInsured() * 0.02);
+      this.homePremium = this.getSumInsured() * 0.02;
     } else if (!rental) {
-      this.homePremium = (int) (this.getSumInsured() * 0.01);
+      this.homePremium = this.getSumInsured() * 0.01;
     }
 
-    if (policyCount == 2) {
-      this.discountedHomePremium = (int) (this.homePremium - (this.homePremium * 0.1));
-    } else if (policyCount >= 3) {
-      this.discountedHomePremium = (int) (this.homePremium - (this.homePremium * 0.15));
+    if (profile.getPolicyCount() == 2) {
+      this.discountedHomePremium = this.homePremium - (this.homePremium * 0.1);
+    } else if (profile.getPolicyCount() >= 3) {
+      this.discountedHomePremium = this.homePremium - (this.homePremium * 0.15);
     } else {
       this.discountedHomePremium = this.homePremium;
     }
   }
 
   public int getDiscountedHomePremium() {
-    return discountedHomePremium;
+    return (int) discountedHomePremium;
   }
 
   public int getBaseHomePremium() {
-    return homePremium;
+    return (int) homePremium;
   }
 
   public String getAddress() {

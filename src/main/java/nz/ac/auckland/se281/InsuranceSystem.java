@@ -15,8 +15,8 @@ public class InsuranceSystem {
   Profile currentProfile;
   Policy currentPolicy;
   int ID = 0;
-  int policyCount;
-  int totalPremium;
+  int policyCount = 0;
+  int totalPremium = 0;
 
   public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
@@ -34,51 +34,69 @@ public class InsuranceSystem {
       MessageCli.PRINT_DB_POLICY_COUNT.printMessage(databaseSizeAsString, "s", ":");
     }
 
+    calculatePolicyCount();
+
     // display all rank, name and age of all entries in the database, active profile will also be
     // marked
     for (Profile currentProfile : database) {
-      policyCount = 0;
+
+      // calculate and set total premium for each profile
       for (Policy currentPolicy : policyDatabase) {
-        if (currentPolicy.getID() == currentProfile.getID()) {
-          policyCount++;
+        if (currentProfile.getID() == currentPolicy.getID() && currentPolicy instanceof CarPolicy) {
+          CarPolicy car = (CarPolicy) currentPolicy;
+          totalPremium += car.getDiscountedCarPremium();
+        } else if (currentProfile.getID() == currentPolicy.getID()
+            && currentPolicy instanceof HomePolicy) {
+          HomePolicy home = (HomePolicy) currentPolicy;
+          totalPremium += home.getDiscountedHomePremium();
+        } else if (currentProfile.getID() == currentPolicy.getID()
+            && currentPolicy instanceof LifePolicy) {
+          LifePolicy life = (LifePolicy) currentPolicy;
+          totalPremium += life.getDiscountedLifePremium();
         }
       }
-      currentProfile.setPolicyCount(policyCount);
+      currentProfile.setTotalPremium(totalPremium);
+      totalPremium = 0;
+
       if (currentProfile.isActive == true) {
         if (currentProfile.getPolicyCount() == 1) {
-          MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
+          MessageCli.PRINT_DB_PROFILE_HEADER_LONG.printMessage(
               "*** ",
               Integer.toString(currentProfile.getRank()),
               currentProfile.getUserName(),
               Integer.toString(currentProfile.getAge()),
               Integer.toString(currentProfile.getPolicyCount()),
-              "y");
+              "y",
+              Integer.toString(currentProfile.getTotalPremium()));
         } else {
-          MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
+          MessageCli.PRINT_DB_PROFILE_HEADER_LONG.printMessage(
               "*** ",
               Integer.toString(currentProfile.getRank()),
               currentProfile.getUserName(),
               Integer.toString(currentProfile.getAge()),
               Integer.toString(currentProfile.getPolicyCount()),
-              "ies");
+              "ies",
+              Integer.toString(currentProfile.getTotalPremium()));
         }
       } else {
         if (currentProfile.getPolicyCount() == 1) {
-          MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
+          MessageCli.PRINT_DB_PROFILE_HEADER_LONG.printMessage(
               " ",
               Integer.toString(currentProfile.getRank()),
               currentProfile.getUserName(),
               Integer.toString(currentProfile.getAge()),
               Integer.toString(currentProfile.getPolicyCount()),
-              "y");
+              "y",
+              Integer.toString(currentProfile.getTotalPremium()));
         } else {
-          MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
+          MessageCli.PRINT_DB_PROFILE_HEADER_LONG.printMessage(
               " ",
               Integer.toString(currentProfile.getRank()),
               currentProfile.getUserName(),
               Integer.toString(currentProfile.getAge()),
               Integer.toString(currentProfile.getPolicyCount()),
-              "ies");
+              "ies",
+              Integer.toString(currentProfile.getTotalPremium()));
         }
       }
     }
@@ -230,8 +248,20 @@ public class InsuranceSystem {
     }
   }
 
-  public void createPolicy(PolicyType type, String[] options) {
+  public void calculatePolicyCount() {
+    for (Profile profile : database) {
+      int counter = 0;
+      for (Policy policy : policyDatabase) {
+        if (policy.getID() == profile.getID()) {
+          counter++;
+        }
+      }
+      profile.setPolicyCount(counter);
+    }
+  }
 
+  public void createPolicy(PolicyType type, String[] options) {
+    calculatePolicyCount();
     // check if no loaded profile
     if (currentProfile == null || currentProfile.isActive == false) {
       MessageCli.NO_PROFILE_FOUND_TO_CREATE_POLICY.printMessage();
@@ -240,15 +270,29 @@ public class InsuranceSystem {
 
     switch (type) {
       case CAR:
+        currentProfile.setPolicyCount(currentProfile.getPolicyCount() + 1);
         Policy carPolicy =
-            new CarPolicy(currentProfile.getID(), ageAsInteger, policyCount, type, options);
+            new CarPolicy(
+                currentProfile,
+                currentProfile.getID(),
+                currentProfile.getAge(),
+                currentProfile.getPolicyCount(),
+                type,
+                options);
         policyDatabase.add(carPolicy);
         MessageCli.NEW_POLICY_CREATED.printMessage(
             (type.toString().toLowerCase()), currentProfile.getUserName());
         break;
 
       case HOME:
-        Policy homePolicy = new HomePolicy(currentProfile.getID(), policyCount, type, options);
+        currentProfile.setPolicyCount(currentProfile.getPolicyCount() + 1);
+        Policy homePolicy =
+            new HomePolicy(
+                currentProfile,
+                currentProfile.getID(),
+                currentProfile.getPolicyCount(),
+                type,
+                options);
         policyDatabase.add(homePolicy);
         MessageCli.NEW_POLICY_CREATED.printMessage(
             type.toString().toLowerCase(), currentProfile.getUserName());
@@ -272,9 +316,15 @@ public class InsuranceSystem {
         }
 
         // otherwise create life policy, if no issues
-
+        currentProfile.setPolicyCount(currentProfile.getPolicyCount() + 1);
         Policy lifePolicy =
-            new LifePolicy(currentProfile.getID(), ageAsInteger, policyCount, type, options);
+            new LifePolicy(
+                currentProfile,
+                currentProfile.getID(),
+                currentProfile.getAge(),
+                currentProfile.getPolicyCount(),
+                type,
+                options);
         policyDatabase.add(lifePolicy);
         MessageCli.NEW_POLICY_CREATED.printMessage(
             type.toString().toLowerCase(), currentProfile.getUserName());

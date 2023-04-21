@@ -4,17 +4,23 @@ import nz.ac.auckland.se281.Main.PolicyType;
 
 public abstract class Policy {
 
-  protected int ID;
-  protected String[] options;
+  private int ID;
+  private String[] options;
   PolicyType type;
-  private int sumInsured;
+  private double sumInsured;
+  private int policyCount;
 
-  public Policy(int ID, PolicyType type, String[] options) {
+  public Policy(int ID, int policyCount, PolicyType type, String[] options) {
 
     this.ID = ID;
     this.type = type;
+    this.sumInsured = Double.parseDouble(options[0]);
+    this.policyCount = policyCount;
     this.options = options;
-    this.sumInsured = Integer.parseInt(options[0]);
+  }
+
+  public int getPolicyCount() {
+    return policyCount;
   }
 
   public int getID() {
@@ -29,7 +35,7 @@ public abstract class Policy {
     return type;
   }
 
-  public int getSumInsured() {
+  public double getSumInsured() {
     return sumInsured;
   }
 }

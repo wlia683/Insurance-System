@@ -7,11 +7,12 @@ public class CarPolicy extends Policy {
   private String makeAndModel;
   private String registration;
   private boolean mechanicalBreakdown;
-  private int carPremium;
-  private int discountedCarPremium;
+  private double carPremium;
+  private double discountedCarPremium;
 
-  public CarPolicy(int ID, int age, int policyCount, PolicyType type, String[] options) {
-    super(ID, type, options);
+  public CarPolicy(
+      Profile profile, int ID, int age, int policyCount, PolicyType type, String[] options) {
+    super(ID, policyCount, type, options);
 
     this.makeAndModel = options[1];
     this.registration = options[2];
@@ -25,33 +26,33 @@ public class CarPolicy extends Policy {
     // Determine premium based on age and mechanical breakdown coverage
     if (age < 25) {
       if (this.mechanicalBreakdown) {
-        this.carPremium = (int) (this.getSumInsured() * 0.15 + 80);
+        this.carPremium = this.getSumInsured() * 0.15 + 80;
       } else {
-        this.carPremium = (int) (this.getSumInsured() * 0.15);
+        this.carPremium = this.getSumInsured() * 0.15;
       }
     } else {
       if (this.mechanicalBreakdown) {
-        this.carPremium = (int) (this.getSumInsured() * 0.1 + 80);
+        this.carPremium = this.getSumInsured() * 0.1 + 80;
       } else {
-        this.carPremium = (int) (this.getSumInsured() * 0.1);
+        this.carPremium = this.getSumInsured() * 0.1;
       }
     }
 
-    if (policyCount == 2) {
-      this.discountedCarPremium = (int) (this.carPremium - (this.carPremium * 0.1));
-    } else if (policyCount >= 3) {
-      this.discountedCarPremium = (int) (this.carPremium - (this.carPremium * 0.15));
+    if (profile.getPolicyCount() == 2) {
+      this.discountedCarPremium = this.carPremium - (this.carPremium * 0.1);
+    } else if (profile.getPolicyCount() >= 3) {
+      this.discountedCarPremium = this.carPremium - (this.carPremium * 0.15);
     } else {
       this.discountedCarPremium = this.carPremium;
     }
   }
 
   public int getBaseCarPremium() {
-    return carPremium;
+    return (int) carPremium;
   }
 
   public int getDiscountedCarPremium() {
-    return discountedCarPremium;
+    return (int) discountedCarPremium;
   }
 
   public String getMakeAndModel() {

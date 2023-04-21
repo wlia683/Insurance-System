@@ -1,14 +1,11 @@
 package nz.ac.auckland.se281;
 
-import java.util.ArrayList;
-
 public class Profile {
 
   private int rank;
   private String userName;
   private int age;
   protected boolean isActive;
-  private ArrayList<Policy> policies;
   private int ID;
   private int policyCount;
   private int totalPremium;
@@ -60,10 +57,6 @@ public class Profile {
 
   public int getAge() {
     return age;
-  }
-
-  public ArrayList<Policy> getPolicies() {
-    return policies;
   }
 
   public void setPolicyCount(int policyCount) {
