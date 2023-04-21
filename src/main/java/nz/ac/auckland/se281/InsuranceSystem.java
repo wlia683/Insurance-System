@@ -37,7 +37,6 @@ public class InsuranceSystem {
     // display all rank, name and age of all entries in the database, active profile will also be
     // marked
     for (Profile currentProfile : database) {
-      // determine policy count
       policyCount = 0;
       for (Policy currentPolicy : policyDatabase) {
         if (currentPolicy.getID() == currentProfile.getID()) {
@@ -45,160 +44,41 @@ public class InsuranceSystem {
         }
       }
       currentProfile.setPolicyCount(policyCount);
-
-      // determine total premium
-      totalPremium = 0;
-      for (Policy currentPolicy : policyDatabase) {
-        if (currentPolicy.getID() == currentProfile.getID()) {
-          if (currentPolicy instanceof CarPolicy) {
-            totalPremium += ((CarPolicy) currentPolicy).getDiscountedCarPremium();
-          } else if (currentPolicy instanceof HomePolicy) {
-            totalPremium += ((HomePolicy) currentPolicy).getDiscountedHomePremium();
-          } else if (currentPolicy instanceof LifePolicy) {
-            totalPremium += ((LifePolicy) currentPolicy).getDiscountedLifePremium();
-          }
-        }
-        currentProfile.setTotalPremium(totalPremium);
-        if (currentProfile.isActive == true) {
-          if (currentProfile.getPolicyCount() == 1) {
-            MessageCli.PRINT_DB_PROFILE_HEADER_LONG.printMessage(
-                "*** ",
-                Integer.toString(currentProfile.getRank()),
-                currentProfile.getUserName(),
-                Integer.toString(currentProfile.getAge()),
-                Integer.toString(currentProfile.getPolicyCount()),
-                "y",
-                Integer.toString(currentProfile.getTotalPremium()));
-            // print details of the policy under this profile
-            switch (currentPolicy.getType()) {
-              case CAR:
-                CarPolicy car = (CarPolicy) currentPolicy;
-                MessageCli.PRINT_DB_CAR_POLICY.printMessage(
-                    car.getMakeAndModel(),
-                    Integer.toString(car.getSumInsured()),
-                    Integer.toString(car.getBaseCarPremium()),
-                    Integer.toString(car.getDiscountedCarPremium()));
-                break;
-              case HOME:
-                HomePolicy home = (HomePolicy) currentPolicy;
-                MessageCli.PRINT_DB_HOME_POLICY.printMessage(
-                    Integer.toString(home.getSumInsured()),
-                    Integer.toString(home.getBaseHomePremium()),
-                    Integer.toString(home.getDiscountedHomePremium()));
-                break;
-              case LIFE:
-                LifePolicy life = (LifePolicy) currentPolicy;
-                MessageCli.PRINT_DB_LIFE_POLICY.printMessage(
-                    Integer.toString(life.getSumInsured()),
-                    Integer.toString(life.getLifePremium()),
-                    Integer.toString(life.getDiscountedLifePremium()));
-                break;
-            }
-          } else {
-            MessageCli.PRINT_DB_PROFILE_HEADER_LONG.printMessage(
-                "*** ",
-                Integer.toString(currentProfile.getRank()),
-                currentProfile.getUserName(),
-                Integer.toString(currentProfile.getAge()),
-                Integer.toString(currentProfile.getPolicyCount()),
-                "ies",
-                Integer.toString(currentProfile.getTotalPremium()));
-            // print details of the policy under this profile
-            switch (currentPolicy.getType()) {
-              case CAR:
-                CarPolicy car = (CarPolicy) currentPolicy;
-                MessageCli.PRINT_DB_CAR_POLICY.printMessage(
-                    car.getMakeAndModel(),
-                    Integer.toString(car.getSumInsured()),
-                    Integer.toString(car.getBaseCarPremium()),
-                    Integer.toString(car.getDiscountedCarPremium()));
-                break;
-              case HOME:
-                HomePolicy home = (HomePolicy) currentPolicy;
-                MessageCli.PRINT_DB_HOME_POLICY.printMessage(
-                    Integer.toString(home.getSumInsured()),
-                    Integer.toString(home.getBaseHomePremium()),
-                    Integer.toString(home.getDiscountedHomePremium()));
-                break;
-              case LIFE:
-                LifePolicy life = (LifePolicy) currentPolicy;
-                MessageCli.PRINT_DB_LIFE_POLICY.printMessage(
-                    Integer.toString(life.getSumInsured()),
-                    Integer.toString(life.getLifePremium()),
-                    Integer.toString(life.getDiscountedLifePremium()));
-                break;
-            }
-          }
+      if (currentProfile.isActive == true) {
+        if (currentProfile.getPolicyCount() == 1) {
+          MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
+              "*** ",
+              Integer.toString(currentProfile.getRank()),
+              currentProfile.getUserName(),
+              Integer.toString(currentProfile.getAge()),
+              Integer.toString(currentProfile.getPolicyCount()),
+              "y");
         } else {
-          if (currentProfile.getPolicyCount() == 1) {
-            MessageCli.PRINT_DB_PROFILE_HEADER_LONG.printMessage(
-                " ",
-                Integer.toString(currentProfile.getRank()),
-                currentProfile.getUserName(),
-                Integer.toString(currentProfile.getAge()),
-                Integer.toString(currentProfile.getPolicyCount()),
-                "y",
-                Integer.toString(currentProfile.getTotalPremium()));
-            // print details of the policy under this profile
-            switch (currentPolicy.getType()) {
-              case CAR:
-                CarPolicy car = (CarPolicy) currentPolicy;
-                MessageCli.PRINT_DB_CAR_POLICY.printMessage(
-                    car.getMakeAndModel(),
-                    Integer.toString(car.getSumInsured()),
-                    Integer.toString(car.getBaseCarPremium()),
-                    Integer.toString(car.getDiscountedCarPremium()));
-                break;
-              case HOME:
-                HomePolicy home = (HomePolicy) currentPolicy;
-                MessageCli.PRINT_DB_HOME_POLICY.printMessage(
-                    Integer.toString(home.getSumInsured()),
-                    Integer.toString(home.getBaseHomePremium()),
-                    Integer.toString(home.getDiscountedHomePremium()));
-                break;
-              case LIFE:
-                LifePolicy life = (LifePolicy) currentPolicy;
-                MessageCli.PRINT_DB_LIFE_POLICY.printMessage(
-                    Integer.toString(life.getSumInsured()),
-                    Integer.toString(life.getLifePremium()),
-                    Integer.toString(life.getDiscountedLifePremium()));
-                break;
-            }
-          } else {
-            MessageCli.PRINT_DB_PROFILE_HEADER_LONG.printMessage(
-                " ",
-                Integer.toString(currentProfile.getRank()),
-                currentProfile.getUserName(),
-                Integer.toString(currentProfile.getAge()),
-                Integer.toString(currentProfile.getPolicyCount()),
-                "ies",
-                Integer.toString(currentProfile.getTotalPremium()));
-            // print details of the policy under this profile
-            switch (currentPolicy.getType()) {
-              case CAR:
-                CarPolicy car = (CarPolicy) currentPolicy;
-                MessageCli.PRINT_DB_CAR_POLICY.printMessage(
-                    car.getMakeAndModel(),
-                    Integer.toString(car.getSumInsured()),
-                    Integer.toString(car.getBaseCarPremium()),
-                    Integer.toString(car.getDiscountedCarPremium()));
-                break;
-              case HOME:
-                HomePolicy home = (HomePolicy) currentPolicy;
-                MessageCli.PRINT_DB_HOME_POLICY.printMessage(
-                    Integer.toString(home.getSumInsured()),
-                    Integer.toString(home.getBaseHomePremium()),
-                    Integer.toString(home.getDiscountedHomePremium()));
-                break;
-              case LIFE:
-                LifePolicy life = (LifePolicy) currentPolicy;
-                MessageCli.PRINT_DB_LIFE_POLICY.printMessage(
-                    Integer.toString(life.getSumInsured()),
-                    Integer.toString(life.getLifePremium()),
-                    Integer.toString(life.getDiscountedLifePremium()));
-                break;
-            }
-          }
+          MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
+              "*** ",
+              Integer.toString(currentProfile.getRank()),
+              currentProfile.getUserName(),
+              Integer.toString(currentProfile.getAge()),
+              Integer.toString(currentProfile.getPolicyCount()),
+              "ies");
+        }
+      } else {
+        if (currentProfile.getPolicyCount() == 1) {
+          MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
+              " ",
+              Integer.toString(currentProfile.getRank()),
+              currentProfile.getUserName(),
+              Integer.toString(currentProfile.getAge()),
+              Integer.toString(currentProfile.getPolicyCount()),
+              "y");
+        } else {
+          MessageCli.PRINT_DB_PROFILE_HEADER_MEDIUM.printMessage(
+              " ",
+              Integer.toString(currentProfile.getRank()),
+              currentProfile.getUserName(),
+              Integer.toString(currentProfile.getAge()),
+              Integer.toString(currentProfile.getPolicyCount()),
+              "ies");
         }
       }
     }
@@ -376,18 +256,18 @@ public class InsuranceSystem {
 
       case LIFE:
 
-        // Check for age or pre-existing policy
+        // Check if over age
         if (currentProfile.getAge() >= 100) {
           MessageCli.OVER_AGE_LIMIT_LIFE_POLICY.printMessage(currentProfile.getUserName());
           return;
         }
 
-        if (currentProfile.getPolicyCount() > 0) {
-          for (Policy currentPolicy : policyDatabase) {
-            if (currentPolicy.getType() == PolicyType.LIFE) {
-              MessageCli.ALREADY_HAS_LIFE_POLICY.printMessage(currentProfile.getUserName());
-              return;
-            }
+        // check for existing life policy
+        for (Policy currentPolicy : policyDatabase) {
+          if (currentPolicy.getID() == currentProfile.getID()
+              && currentPolicy.getType() == PolicyType.LIFE) {
+            MessageCli.ALREADY_HAS_LIFE_POLICY.printMessage(currentProfile.getUserName());
+            return;
           }
         }
 
