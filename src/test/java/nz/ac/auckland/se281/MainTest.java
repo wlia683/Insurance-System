@@ -14,7 +14,7 @@ import org.junit.runners.Suite.SuiteClasses;
   MainTest.Task1.class,
   MainTest.Task2.class, // Uncomment this line when to start Task 2
   MainTest.Task3.class, // Uncomment this line when to start Task 3
-  // MainTest.YourTests.class, // Uncomment this line to run your own tests
+  MainTest.YourTests.class, // Uncomment this line to run your own tests
 })
 public class MainTest {
   public static class Task1 extends CliTest {
@@ -469,8 +469,46 @@ public class MainTest {
     @Test
     public void TY_01_your_own_test() throws Exception {
       // Write your own test here, in the same format as the other tests.
-      runCommands(PRINT_DB);
-      assertContains("");
+      runCommands(
+          unpack( //
+              CREATE_EIGHT_CLIENTS, //
+              LOAD_PROFILE,
+              "Bugsy", //
+              POLICY_HOME,
+              options("1000000", "25 Azalea Street", "yes"), //
+              POLICY_CAR,
+              options("55000", "Volkswagen Golf GTI", "HYB458", "yes"), //
+              UNLOAD_PROFILE, //
+              LOAD_PROFILE,
+              "Whitney", //
+              POLICY_CAR,
+              options("78000", "BMW M2", "FHD543", "yes"), //
+              POLICY_CAR,
+              options("102000", "Audi RS3", "VNC985", "no"), //
+              UNLOAD_PROFILE, //
+              LOAD_PROFILE,
+              "Jasmine",
+              POLICY_HOME,
+              options("760000", "30 Olivine Road", "no"), //
+              POLICY_CAR,
+              options("86000", "Volkswagen Golf R", "NVB158", "yes"),
+              POLICY_LIFE,
+              options("750000"),
+              PRINT_DB));
+      assertContains("2: Bugsy, 16, 2 policies for a total of $25497");
+      assertContains(
+          "Home Policy (25 Azalea Street, Sum Insured: $1000000, Premium: $20000 -> $18000)");
+
+      assertContains("3: Whitney, 20, 2 policies for a total of $24372");
+      assertContains("Car Policy (BMW M2, Sum Insured: $78000, Premium: $11780 -> $10602)");
+      assertContains("Car Policy (Audi RS3, Sum Insured: $102000, Premium: $15300 -> $13770)");
+
+      assertContains("*** 6: Jasmine, 35, 3 policies for a total of $21124");
+      assertContains(
+          "Home Policy (30 Olivine Road, Sum Insured: $760000, Premium: $7600 -> $6080)");
+      assertContains(
+          "Car Policy (Volkswagen Golf R, Sum Insured: $86000, Premium: $8680 -> $6944)");
+      assertContains("Life Policy (Sum Insured: $750000, Premium: $10125 -> $8100)");
     }
 
     @Test
@@ -480,6 +518,18 @@ public class MainTest {
       assertContains("");
     }
   }
+
+  private static final Object[] CREATE_EIGHT_CLIENTS =
+      new Object[] {
+        CREATE_PROFILE, "Falkner", "9",
+        CREATE_PROFILE, "Bugsy", "16",
+        CREATE_PROFILE, "Whitney", "20",
+        CREATE_PROFILE, "Morty", "26",
+        CREATE_PROFILE, "Chuck", "30",
+        CREATE_PROFILE, "Jasmine", "35",
+        CREATE_PROFILE, "Pryce", "37",
+        CREATE_PROFILE, "Clair", "40",
+      };
 
   private static final Object[] CREATE_SOME_CLIENTS =
       new Object[] {
