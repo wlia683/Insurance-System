@@ -6,13 +6,14 @@ public class Profile {
   private String userName;
   private int age;
   protected boolean isActive;
-  private int ID;
+  private int identity;
   private int policyCount;
   private double totalPremium;
 
-  public Profile(int rank, int ID, boolean isActive, String userName, String age, int policyCount) {
+  public Profile(
+      int rank, int identity, boolean isActive, String userName, String age, int policyCount) {
     this.rank = rank;
-    this.ID = ID;
+    this.identity = identity;
     this.userName = userName;
     this.isActive = isActive;
     this.age = Integer.parseInt(age);
@@ -27,12 +28,12 @@ public class Profile {
     this.totalPremium = totalPremium;
   }
 
-  public void setID(int ID) {
-    this.ID = ID;
+  public void setIdentity(int identity) {
+    this.identity = identity;
   }
 
-  public int getID() {
-    return ID;
+  public int getIdentity() {
+    return identity;
   }
 
   public void setRank(int rank) {

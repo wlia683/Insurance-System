@@ -9,8 +9,9 @@ public class HomePolicy extends Policy {
   private double homePremium;
   private double discountedHomePremium;
 
-  public HomePolicy(Profile profile, int ID, int policyCount, PolicyType type, String[] options) {
-    super(ID, policyCount, type, options);
+  public HomePolicy(
+      Profile profile, int identity, int policyCount, PolicyType type, String[] options) {
+    super(identity, policyCount, type, options);
 
     this.address = options[1];
     if (options[2].equalsIgnoreCase("y") || options[2].equalsIgnoreCase("yes")) {

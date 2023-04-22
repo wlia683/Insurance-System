@@ -8,8 +8,8 @@ public class LifePolicy extends Policy {
   private double discountedLifePremium;
 
   public LifePolicy(
-      Profile profile, int ID, int age, int policyCount, PolicyType type, String[] options) {
-    super(ID, policyCount, type, options);
+      Profile profile, int identity, int age, int policyCount, PolicyType type, String[] options) {
+    super(identity, policyCount, type, options);
     this.lifePremium = ((double) age / 100 + 1) / 100 * (double) this.getSumInsured();
   }
 

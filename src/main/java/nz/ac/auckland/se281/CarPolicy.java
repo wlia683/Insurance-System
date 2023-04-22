@@ -11,8 +11,8 @@ public class CarPolicy extends Policy {
   private double discountedCarPremium;
 
   public CarPolicy(
-      Profile profile, int ID, int age, int policyCount, PolicyType type, String[] options) {
-    super(ID, policyCount, type, options);
+      Profile profile, int identity, int age, int policyCount, PolicyType type, String[] options) {
+    super(identity, policyCount, type, options);
 
     this.makeAndModel = options[1];
     this.registration = options[2];
