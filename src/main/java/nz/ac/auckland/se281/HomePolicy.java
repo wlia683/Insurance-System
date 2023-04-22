@@ -13,9 +13,9 @@ public class HomePolicy extends Policy {
     super(ID, policyCount, type, options);
 
     this.address = options[1];
-    if (options[2].equals("y")) {
+    if (options[2].equalsIgnoreCase("y") || options[2].equalsIgnoreCase("yes")) {
       this.rental = true;
-    } else if (options[2].equals("n")) {
+    } else if (options[2].equalsIgnoreCase("n") || options[2].equalsIgnoreCase("no")) {
       this.rental = false;
     }
 
