@@ -43,14 +43,11 @@ public class CarPolicy extends Policy {
     return carPremium;
   }
 
+  public void setDiscountedCarPremium(double discountedCarPremium) {
+    this.discountedCarPremium = discountedCarPremium;
+  }
+
   public int getDiscountedCarPremium() {
-    if (this.getPolicyCount() == 2) {
-      discountedCarPremium = carPremium * 0.9;
-    } else if (this.getPolicyCount() >= 3) {
-      discountedCarPremium = carPremium * 0.8;
-    } else {
-      discountedCarPremium = carPremium;
-    }
     return (int) discountedCarPremium;
   }
 

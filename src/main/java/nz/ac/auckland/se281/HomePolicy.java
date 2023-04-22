@@ -38,14 +38,11 @@ public class HomePolicy extends Policy {
     return rental;
   }
 
+  public void setDiscountedHomePremium(double discountedHomePremium) {
+    this.discountedHomePremium = discountedHomePremium;
+  }
+
   public int getDiscountedHomePremium() {
-    if (this.getPolicyCount() == 2) {
-      discountedHomePremium = this.homePremium * 0.9;
-    } else if (this.getPolicyCount() >= 3) {
-      discountedHomePremium = this.homePremium * 0.8;
-    } else {
-      discountedHomePremium = this.homePremium;
-    }
     return (int) discountedHomePremium;
   }
 }

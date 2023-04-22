@@ -17,14 +17,11 @@ public class LifePolicy extends Policy {
     return this.lifePremium;
   }
 
+  public void setDiscountedLifePremium(double discountedLifePremium) {
+    this.discountedLifePremium = discountedLifePremium;
+  }
+
   public int getDiscountedLifePremium() {
-    if (this.getPolicyCount() == 2) {
-      discountedLifePremium = lifePremium * 0.9;
-    } else if (this.getPolicyCount() >= 3) {
-      discountedLifePremium = lifePremium * 0.8;
-    } else {
-      discountedLifePremium = lifePremium;
-    }
     return (int) discountedLifePremium;
   }
 }

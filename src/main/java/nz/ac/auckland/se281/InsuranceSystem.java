@@ -31,8 +31,9 @@ public class InsuranceSystem {
       String databaseSizeAsString = Integer.toString(databaseSize);
       MessageCli.PRINT_DB_POLICY_COUNT.printMessage(databaseSizeAsString, "s", ":");
     }
-    // #selfmade methods :P
+
     calculatePolicyCount();
+    calculateDiscountedPolicies();
     calculateTotalPremium();
 
     // display all rank, name and age of all entries in the database, active profile will also be
@@ -55,20 +56,20 @@ public class InsuranceSystem {
                   car.getMakeAndModel(),
                   Integer.toString((int) car.getSumInsured()),
                   Integer.toString((int) car.getBaseCarPremium()),
-                  Integer.toString((int) car.getDiscountedCarPremium()));
+                  Integer.toString(car.getDiscountedCarPremium()));
             } else if (policy.getID() == profile.getID() && policy instanceof LifePolicy) {
               LifePolicy life = (LifePolicy) policy;
               MessageCli.PRINT_DB_LIFE_POLICY.printMessage(
                   Integer.toString((int) life.getSumInsured()),
                   Integer.toString((int) life.getBaseLifePremium()),
-                  Integer.toString((int) life.getDiscountedLifePremium()));
+                  Integer.toString(life.getDiscountedLifePremium()));
             } else if (policy.getID() == profile.getID() && policy instanceof HomePolicy) {
               HomePolicy home = (HomePolicy) policy;
               MessageCli.PRINT_DB_HOME_POLICY.printMessage(
                   home.getAddress(),
                   Integer.toString((int) home.getSumInsured()),
                   Integer.toString((int) home.getBaseHomePremium()),
-                  Integer.toString((int) home.getDiscountedHomePremium()));
+                  Integer.toString(home.getDiscountedHomePremium()));
             }
           }
         } else {
@@ -87,20 +88,20 @@ public class InsuranceSystem {
                   car.getMakeAndModel(),
                   Integer.toString((int) car.getSumInsured()),
                   Integer.toString((int) car.getBaseCarPremium()),
-                  Integer.toString((int) car.getDiscountedCarPremium()));
+                  Integer.toString(car.getDiscountedCarPremium()));
             } else if (policy.getID() == profile.getID() && policy instanceof LifePolicy) {
               LifePolicy life = (LifePolicy) policy;
               MessageCli.PRINT_DB_LIFE_POLICY.printMessage(
                   Integer.toString((int) life.getSumInsured()),
                   Integer.toString((int) life.getBaseLifePremium()),
-                  Integer.toString((int) life.getDiscountedLifePremium()));
+                  Integer.toString(life.getDiscountedLifePremium()));
             } else if (policy.getID() == profile.getID() && policy instanceof HomePolicy) {
               HomePolicy home = (HomePolicy) policy;
               MessageCli.PRINT_DB_HOME_POLICY.printMessage(
                   home.getAddress(),
                   Integer.toString((int) home.getSumInsured()),
                   Integer.toString((int) home.getBaseHomePremium()),
-                  Integer.toString((int) home.getDiscountedHomePremium()));
+                  Integer.toString(home.getDiscountedHomePremium()));
             }
           }
         }
@@ -121,20 +122,20 @@ public class InsuranceSystem {
                   car.getMakeAndModel(),
                   Integer.toString((int) car.getSumInsured()),
                   Integer.toString((int) car.getBaseCarPremium()),
-                  Integer.toString((int) car.getDiscountedCarPremium()));
+                  Integer.toString(car.getDiscountedCarPremium()));
             } else if (policy.getID() == profile.getID() && policy instanceof LifePolicy) {
               LifePolicy life = (LifePolicy) policy;
               MessageCli.PRINT_DB_LIFE_POLICY.printMessage(
                   Integer.toString((int) life.getSumInsured()),
                   Integer.toString((int) life.getBaseLifePremium()),
-                  Integer.toString((int) life.getDiscountedLifePremium()));
+                  Integer.toString(life.getDiscountedLifePremium()));
             } else if (policy.getID() == profile.getID() && policy instanceof HomePolicy) {
               HomePolicy home = (HomePolicy) policy;
               MessageCli.PRINT_DB_HOME_POLICY.printMessage(
                   home.getAddress(),
                   Integer.toString((int) home.getSumInsured()),
                   Integer.toString((int) home.getBaseHomePremium()),
-                  Integer.toString((int) home.getDiscountedHomePremium()));
+                  Integer.toString(home.getDiscountedHomePremium()));
             }
           }
         } else {
@@ -153,20 +154,20 @@ public class InsuranceSystem {
                   car.getMakeAndModel(),
                   Integer.toString((int) car.getSumInsured()),
                   Integer.toString((int) car.getBaseCarPremium()),
-                  Integer.toString((int) car.getDiscountedCarPremium()));
+                  Integer.toString(car.getDiscountedCarPremium()));
             } else if (policy.getID() == profile.getID() && policy instanceof LifePolicy) {
               LifePolicy life = (LifePolicy) policy;
               MessageCli.PRINT_DB_LIFE_POLICY.printMessage(
                   Integer.toString((int) life.getSumInsured()),
                   Integer.toString((int) life.getBaseLifePremium()),
-                  Integer.toString((int) life.getDiscountedLifePremium()));
+                  Integer.toString(life.getDiscountedLifePremium()));
             } else if (policy.getID() == profile.getID() && policy instanceof HomePolicy) {
               HomePolicy home = (HomePolicy) policy;
               MessageCli.PRINT_DB_HOME_POLICY.printMessage(
                   home.getAddress(),
                   Integer.toString((int) home.getSumInsured()),
                   Integer.toString((int) home.getBaseHomePremium()),
-                  Integer.toString((int) home.getDiscountedHomePremium()));
+                  Integer.toString(home.getDiscountedHomePremium()));
             }
           }
         }
@@ -331,6 +332,43 @@ public class InsuranceSystem {
         }
       }
       profile.setPolicyCount(counter);
+    }
+  }
+
+  // Set discounted premium for each policy
+  public void calculateDiscountedPolicies() {
+    calculatePolicyCount();
+    for (Profile profile : database) {
+      for (Policy policy : policyDatabase) {
+        if (profile.getID() == policy.getID() && policy instanceof CarPolicy) {
+          CarPolicy car = (CarPolicy) policy;
+          if (profile.getPolicyCount() == 2) {
+            car.setDiscountedCarPremium(car.getBaseCarPremium() * 0.9);
+          } else if (profile.getPolicyCount() >= 3) {
+            car.setDiscountedCarPremium(car.getBaseCarPremium() * 0.8);
+          } else {
+            car.setDiscountedCarPremium(car.getBaseCarPremium());
+          }
+        } else if (profile.getID() == policy.getID() && policy instanceof HomePolicy) {
+          HomePolicy home = (HomePolicy) policy;
+          if (profile.getPolicyCount() == 2) {
+            home.setDiscountedHomePremium(home.getBaseHomePremium() * 0.9);
+          } else if (profile.getPolicyCount() >= 3) {
+            home.setDiscountedHomePremium(home.getBaseHomePremium() * 0.8);
+          } else {
+            home.setDiscountedHomePremium(home.getBaseHomePremium());
+          }
+        } else if (profile.getID() == policy.getID() && policy instanceof LifePolicy) {
+          LifePolicy life = (LifePolicy) policy;
+          if (profile.getPolicyCount() == 2) {
+            life.setDiscountedLifePremium(life.getBaseLifePremium() * 0.9);
+          } else if (profile.getPolicyCount() >= 3) {
+            life.setDiscountedLifePremium(life.getBaseLifePremium() * 0.8);
+          } else {
+            life.setDiscountedLifePremium(life.getBaseLifePremium());
+          }
+        }
+      }
     }
   }
 
