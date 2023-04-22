@@ -7,6 +7,7 @@ public class HomePolicy extends Policy {
   private String address;
   private boolean rental;
   private double homePremium;
+  private double discountedHomePremium;
 
   public HomePolicy(Profile profile, int ID, int policyCount, PolicyType type, String[] options) {
     super(ID, policyCount, type, options);
@@ -35,5 +36,16 @@ public class HomePolicy extends Policy {
 
   public boolean getRentalStatus() {
     return rental;
+  }
+
+  public int getDiscountedHomePremium() {
+    if (this.getPolicyCount() == 2) {
+      discountedHomePremium = this.homePremium * 0.9;
+    } else if (this.getPolicyCount() >= 3) {
+      discountedHomePremium = this.homePremium * 0.8;
+    } else {
+      discountedHomePremium = this.homePremium;
+    }
+    return (int) discountedHomePremium;
   }
 }

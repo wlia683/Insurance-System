@@ -8,6 +8,7 @@ public class CarPolicy extends Policy {
   private String registration;
   private boolean mechanicalBreakdown;
   private double carPremium;
+  private double discountedCarPremium;
 
   public CarPolicy(
       Profile profile, int ID, int age, int policyCount, PolicyType type, String[] options) {
@@ -40,6 +41,17 @@ public class CarPolicy extends Policy {
 
   public double getBaseCarPremium() {
     return carPremium;
+  }
+
+  public int getDiscountedCarPremium() {
+    if (this.getPolicyCount() == 2) {
+      discountedCarPremium = carPremium * 0.9;
+    } else if (this.getPolicyCount() >= 3) {
+      discountedCarPremium = carPremium * 0.8;
+    } else {
+      discountedCarPremium = carPremium;
+    }
+    return (int) discountedCarPremium;
   }
 
   public String getMakeAndModel() {
