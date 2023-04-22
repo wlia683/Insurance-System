@@ -15,8 +15,6 @@ public class InsuranceSystem {
   Profile currentProfile;
   Policy currentPolicy;
   int ID = 0;
-  int policyCount = 0;
-  int totalPremium = 0;
 
   public InsuranceSystem() {
     // Only this constructor can be used (if you need to initialise fields).
@@ -35,68 +33,49 @@ public class InsuranceSystem {
     }
 
     calculatePolicyCount();
-
+    calculateTotalPremium();
     // display all rank, name and age of all entries in the database, active profile will also be
     // marked
-    for (Profile currentProfile : database) {
-
-      // calculate and set total premium for each profile
-      for (Policy currentPolicy : policyDatabase) {
-        if (currentProfile.getID() == currentPolicy.getID() && currentPolicy instanceof CarPolicy) {
-          CarPolicy car = (CarPolicy) currentPolicy;
-          totalPremium += car.getDiscountedCarPremium();
-        } else if (currentProfile.getID() == currentPolicy.getID()
-            && currentPolicy instanceof HomePolicy) {
-          HomePolicy home = (HomePolicy) currentPolicy;
-          totalPremium += home.getDiscountedHomePremium();
-        } else if (currentProfile.getID() == currentPolicy.getID()
-            && currentPolicy instanceof LifePolicy) {
-          LifePolicy life = (LifePolicy) currentPolicy;
-          totalPremium += life.getDiscountedLifePremium();
-        }
-      }
-      currentProfile.setTotalPremium(totalPremium);
-      totalPremium = 0;
-
-      if (currentProfile.isActive == true) {
-        if (currentProfile.getPolicyCount() == 1) {
+    for (Profile profile : database) {
+      if (profile.isActive == true) {
+        if (profile.getPolicyCount() == 1) {
           MessageCli.PRINT_DB_PROFILE_HEADER_LONG.printMessage(
               "*** ",
-              Integer.toString(currentProfile.getRank()),
-              currentProfile.getUserName(),
-              Integer.toString(currentProfile.getAge()),
-              Integer.toString(currentProfile.getPolicyCount()),
+              Integer.toString(profile.getRank()),
+              profile.getUserName(),
+              Integer.toString(profile.getAge()),
+              Integer.toString(profile.getPolicyCount()),
               "y",
-              Integer.toString(currentProfile.getTotalPremium()));
+              Integer.toString(profile.getTotalPremium()));
         } else {
           MessageCli.PRINT_DB_PROFILE_HEADER_LONG.printMessage(
               "*** ",
-              Integer.toString(currentProfile.getRank()),
-              currentProfile.getUserName(),
-              Integer.toString(currentProfile.getAge()),
-              Integer.toString(currentProfile.getPolicyCount()),
+              Integer.toString(profile.getRank()),
+              profile.getUserName(),
+              Integer.toString(profile.getAge()),
+              Integer.toString(profile.getPolicyCount()),
               "ies",
-              Integer.toString(currentProfile.getTotalPremium()));
+              Integer.toString(profile.getTotalPremium()));
         }
       } else {
-        if (currentProfile.getPolicyCount() == 1) {
+        if (profile.getPolicyCount() == 1) {
           MessageCli.PRINT_DB_PROFILE_HEADER_LONG.printMessage(
               " ",
-              Integer.toString(currentProfile.getRank()),
-              currentProfile.getUserName(),
-              Integer.toString(currentProfile.getAge()),
-              Integer.toString(currentProfile.getPolicyCount()),
+              Integer.toString(profile.getRank()),
+              profile.getUserName(),
+              Integer.toString(profile.getAge()),
+              Integer.toString(profile.getPolicyCount()),
               "y",
-              Integer.toString(currentProfile.getTotalPremium()));
+              Integer.toString(profile.getTotalPremium()));
         } else {
           MessageCli.PRINT_DB_PROFILE_HEADER_LONG.printMessage(
               " ",
-              Integer.toString(currentProfile.getRank()),
-              currentProfile.getUserName(),
-              Integer.toString(currentProfile.getAge()),
-              Integer.toString(currentProfile.getPolicyCount()),
+              Integer.toString(profile.getRank()),
+              profile.getUserName(),
+              Integer.toString(profile.getAge()),
+              Integer.toString(profile.getPolicyCount()),
               "ies",
-              Integer.toString(currentProfile.getTotalPremium()));
+              Integer.toString(profile.getTotalPremium()));
         }
       }
     }
@@ -144,6 +123,7 @@ public class InsuranceSystem {
     }
 
     // Otherwise, if all good add profile to database
+    int policyCount = 0;
     Profile currentProfile = new Profile(rank, ID, isActive, userName, age, policyCount);
     database.add(currentProfile);
     MessageCli.PROFILE_CREATED.printMessage(userName, age);
@@ -248,6 +228,7 @@ public class InsuranceSystem {
     }
   }
 
+  // Calculate number of policies for each profile
   public void calculatePolicyCount() {
     for (Profile profile : database) {
       int counter = 0;
@@ -257,6 +238,32 @@ public class InsuranceSystem {
         }
       }
       profile.setPolicyCount(counter);
+    }
+  }
+
+  // Calculate total premium to pay for each profile
+  public void calculateTotalPremium() {
+    for (Profile profile : database) {
+      double totalPremium = 0;
+      for (Policy policy : policyDatabase) {
+        if (profile.getID() == policy.getID() && policy instanceof CarPolicy) {
+          CarPolicy car = (CarPolicy) policy;
+          totalPremium += car.getBaseCarPremium();
+        } else if (profile.getID() == policy.getID() && policy instanceof HomePolicy) {
+          HomePolicy home = (HomePolicy) policy;
+          totalPremium += home.getBaseHomePremium();
+        } else if (profile.getID() == policy.getID() && policy instanceof LifePolicy) {
+          LifePolicy life = (LifePolicy) policy;
+          totalPremium += life.getBaseLifePremium();
+        }
+      }
+      calculatePolicyCount();
+      if (profile.getPolicyCount() == 2) {
+        totalPremium = (totalPremium * 0.9);
+      } else if (profile.getPolicyCount() >= 3) {
+        totalPremium = (totalPremium * 0.85);
+      }
+      profile.setTotalPremium(totalPremium);
     }
   }
 

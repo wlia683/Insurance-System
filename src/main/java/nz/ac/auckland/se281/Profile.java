@@ -8,7 +8,7 @@ public class Profile {
   protected boolean isActive;
   private int ID;
   private int policyCount;
-  private int totalPremium;
+  private double totalPremium;
 
   public Profile(int rank, int ID, boolean isActive, String userName, String age, int policyCount) {
     this.rank = rank;
@@ -20,10 +20,10 @@ public class Profile {
   }
 
   public int getTotalPremium() {
-    return totalPremium;
+    return (int) totalPremium;
   }
 
-  public void setTotalPremium(int totalPremium) {
+  public void setTotalPremium(double totalPremium) {
     this.totalPremium = totalPremium;
   }
 
