@@ -327,6 +327,7 @@ public class InsuranceSystem {
             policyDatabase.remove(k);
           }
         }
+        rank--;
         return;
       }
       if (i == database.size() - 1) {
@@ -405,6 +406,8 @@ public class InsuranceSystem {
           totalPremium += life.getBaseLifePremium();
         }
       }
+      // determine policy count and then based on that apply the appropriate discount and finally,
+      // set the total premium to pay
       calculatePolicyCount();
       if (profile.getPolicyCount() == 2) {
         totalPremium = (totalPremium * 0.9);

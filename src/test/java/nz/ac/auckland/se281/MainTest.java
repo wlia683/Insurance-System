@@ -479,6 +479,8 @@ public class MainTest {
               POLICY_CAR,
               options("55000", "Volkswagen Golf GTI", "HYB458", "yes"), //
               UNLOAD_PROFILE, //
+              DELETE_PROFILE,
+              "Clair",
               LOAD_PROFILE,
               "Whitney", //
               POLICY_CAR,
@@ -494,6 +496,12 @@ public class MainTest {
               options("86000", "Volkswagen Golf R", "NVB158", "yes"),
               POLICY_LIFE,
               options("750000"),
+              UNLOAD_PROFILE, //
+              CREATE_PROFILE,
+              "Clair",
+              "40",
+              LOAD_PROFILE,
+              "Jasmine",
               PRINT_DB));
       assertContains("2: Bugsy, 16, 2 policies for a total of $25497");
       assertContains(
@@ -509,6 +517,7 @@ public class MainTest {
       assertContains(
           "Car Policy (Volkswagen Golf R, Sum Insured: $86000, Premium: $8680 -> $6944)");
       assertContains("Life Policy (Sum Insured: $750000, Premium: $10125 -> $8100)");
+      assertContains("8: Clair, 40, 0 policies for a total of $0");
     }
 
     @Test
@@ -527,7 +536,7 @@ public class MainTest {
         CREATE_PROFILE, "Morty", "26",
         CREATE_PROFILE, "Chuck", "30",
         CREATE_PROFILE, "Jasmine", "35",
-        CREATE_PROFILE, "Pryce", "37",
+        CREATE_PROFILE, "Pryce", "36",
         CREATE_PROFILE, "Clair", "40",
       };
 
